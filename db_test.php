@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'admin');
 define('DB_PASSWORD', 'student1234');
