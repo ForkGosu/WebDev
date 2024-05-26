@@ -1,5 +1,5 @@
 <?php
-    require_once('login_func.php');
+  require_once('./data/session.php');
 ?>
 <html>
 
@@ -12,11 +12,11 @@
 <body>
 <div class="wrapper">
   <div class="container">
-    <div class="sign-in-container">
-        <form method="POST" action="">
-        <h1>Sign In</h1>
+    <div class="sign-up-container">
+      <form action="./join_proc.php" method="POST">
+        <h1>회원가입</h1>
         <div class="social-links">
-          <div>
+          <!-- <div>
             <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
           </div>
           <div>
@@ -24,42 +24,48 @@
           </div>
           <div>
             <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-          </div>
+          </div> -->
         </div>
-        <span>위의 버튼은 간지 입니다</span>
-        <input type="text" name="UserId" placeholder="아이디를 입력하세요">
-        <input type="password" name="Password" placeholder="비밀번호를 입력하세요">
-        <button name="Submit" value="Login" type="submit" class="form_btn">로그인</button>
+        <span>회원가입을 위해 이름, 아이디, 비밀번호 입력</span>
+        <input type="text" name="name" placeholder="이름">
+        <input type="text" name="id" placeholder="아이디">
+        <input type="password" name="pass" placeholder="비밀번호">
+        <button class="form_btn">회원가입</button>
+      </form>
+    </div>
+    <div class="sign-in-container">
+      <form action="./login_proc.php" method="POST">
+        <h1>로그인</h1>
+        <div class="social-links">
+          <!-- <div>
+            <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+          </div>
+          <div>
+            <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+          </div>
+          <div>
+            <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+          </div> -->
+        </div>
+        <span>로그인을 위해 아이디, 비밀번호 입력</span>
+        <input type="text" name="id" placeholder="아이디">
+        <input type="password" name="pass" placeholder="비밀번호">
+        <button class="form_btn">로그인</button>
       </form>
     </div>
     <div class="overlay-container">
       <div class="overlay-left">
-        <h1>Welcome Back</h1>
-        <p>To keep connected with us please login with your personal info</p>
-        <button id="signIn" class="overlay_btn">Sign In</button>
+        <h1>환영합니다!</h1>
+        <p>완전 환영합니다!</p>
+        <button id="signIn" class="overlay_btn">< 로그인으로</button>
       </div>
       <div class="overlay-right">
-        <p>임시 로그인 페이지 입니다.</p><p> 당장 로그인해 주세요.</p>
+        <h1>안녕하세요!</h1>
+        <p>완전 안녕하세요!</p>
+        <button id="signUp" class="overlay_btn">회원가입으로 ></button>
       </div>
     </div>
   </div>
-    <?php
-    if(isset($_POST['Submit'])){
-      $login_res=login1($_POST['userId'], $_POST['Password']);
-      
-      if($login_res) {
-        header("location:index.php?login_id=".$login_res);
-        exit;
-      } else { ?>
-        <div class="error-message">
-          <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <strong>Warning!</strong> Incrrect information.
-          </div>
-        </div>
-    <?php } } ?>
 </div>
 </body>
 

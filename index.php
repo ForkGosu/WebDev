@@ -1,5 +1,7 @@
 <?php
-    if($_GET['login_id'] == ""){
+    require_once('./data/session.php');
+    var_dump($_SESSION['id']);
+    if($_SESSION['id'] == ""){
         header("location:login.php");
         exit; // 밑의 html과 php코드가 노출되지 않게 하기 위함
     }
