@@ -5,8 +5,8 @@
 
 <head>
     <title>로그인 페이지</title>
-    <link rel="stylesheet" href="./css/login.css">
-    <script src="./js/login.js" defer></script>
+    <link rel="stylesheet" href="/resources/css/login.css">
+    <script src="/resources/js/login.js" defer></script>
 </head>
 
 <body>

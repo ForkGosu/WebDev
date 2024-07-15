@@ -2,20 +2,20 @@
 <html lang="en" class="h-100">
 
 <!-- Head 추가 -->
-<?php require_once($_SERVER['DOCUMENT_ROOT'].'/include/head.php'); ?>
+<?php require_once('./data/head.php'); ?>
 
 <!-- Body 시작 -->
 <body class="d-flex h-100 text-center text-white bg-dark">
 
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <!-- header 추가 -->
-        <?php require_once($_SERVER['DOCUMENT_ROOT'].'/include/header.php'); ?>
+        <?php require_once('./data/header.php'); ?>
         
         <!-- 배너 사진 -->
-        <figure class="figure">
-            <img src="/resources/img/banner.png" class="figure-img img-fluid rounded" alt="...">
-            <!-- <figcaption class="figure-caption">A caption for the above image.</figcaption> -->
-        </figure>
+        <img src="./resources/img/banner.png">
+        <main class="px-3">
+            <p class="lead"></p>
+        </main>
         <!-- 배너 글과 버튼 -->
         <main class="px-3">
             <h1>안심하세요 안전한 놀이터 입니다</h1>
@@ -25,7 +25,7 @@
             </p>
         </main>
         <!-- footer 추가 -->
-        <?php require_once($_SERVER['DOCUMENT_ROOT'].'/include/footer.php'); ?>
+        <?php require_once('./data/footer.php'); ?>
     </div>
 </body>
 
