@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" class="h-100">
+<html lang="en" class="h-100">
 
 <!-- Head 추가 -->
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/include/head.php'); ?>
@@ -18,8 +18,8 @@
         </figure>
         <!-- 배너 글과 버튼 -->
         <main class="px-3">
-            <h1>포크 놀이터</h1>
-            <p class="lead">안전한 사이트 입니다! 안심하고 즐겨주세요!</p>
+            <h1>안심하세요 안전한 놀이터 입니다</h1>
+            <p class="lead">해당 사이트는 놀이터입니다</p>
             <p class="lead">
                 <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">더 알아가기</a>
             </p>
