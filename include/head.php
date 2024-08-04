@@ -12,7 +12,9 @@
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/resources/css/cover.css" rel="stylesheet">
-    
+    <!-- Bootstrap core CSS -->
+    <link href="/resources/css/font-awesome.min.css?ver=2303229" rel="stylesheet" type="text/css">
+    <!-- <link rel="stylesheet" href="https://theme.kilho.net/js/font-awesome/css/font-awesome.min.css?ver=2303229"> -->
 
     <script src="/resources/js/bootstrap.bundle.min.js"></script>
     <script src="/resources/js/jquery-3.6.0.min.js"></script>

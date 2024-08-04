@@ -11,13 +11,14 @@
         <!-- header 추가 -->
         <?php require_once($_SERVER['DOCUMENT_ROOT'].'/include/header.php'); ?>
         
-        <!-- 배너 사진 -->
-        <figure class="figure">
-            <img src="/resources/img/banner.png" class="figure-img img-fluid rounded" alt="...">
-            <!-- <figcaption class="figure-caption">A caption for the above image.</figcaption> -->
-        </figure>
-        <!-- 배너 글과 버튼 -->
+        <!-- main 시작 -->
         <main class="px-3">
+            <!-- 배너 사진 -->
+            <figure class="figure">
+                <img src="/resources/img/banner.png" class="figure-img img-fluid rounded" alt="...">
+                <!-- <figcaption class="figure-caption">A caption for the above image.</figcaption> -->
+            </figure>
+            <!-- 배너 글 -->
             <h1>포크 놀이터</h1>
             <p class="lead">안전한 사이트 입니다! 안심하고 즐겨주세요!</p>
             <p class="lead">

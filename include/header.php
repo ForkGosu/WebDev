@@ -1,9 +1,10 @@
 <?php
     // 현재 파일명을 가져와서 우측 상단 메뉴 확인용
-    $current_page = basename($_SERVER['PHP_SELF']);
+    // $current_page = basename($_SERVER['PHP_SELF']);
+    // 현재 요청된 URL 경로를 가져옵니다.
+    $current_page = $_SERVER['REQUEST_URI'];
 ?>
-
-<header class="mb-auto">
+<header style="margin-bottom: 100px">
     <div>
         <h3 class="float-md-start mb-0">포크 놀이터</h3>
         <?php if($_SESSION['id'] == ""){ ?>
@@ -18,17 +19,18 @@
                     <?php echo $_SESSION['id']; ?>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="/mypage.php">마이 페이지</a></li>
+                    <li><a class="dropdown-item" href="/mypage">마이 페이지</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="/proc/logout_proc.php">로그아웃</a></li>
                 </ul>
             </div>
         <?php } ?>
-        <nav class="nav nav-masthead justify-content-center float-md-end">
-            <a class="nav-link <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>" aria-current="page" href="/">메인</a>
-            <a class="nav-link <?php echo ($current_page == 'board.php') ? 'active' : ''; ?>" href="/board.php">게시판</a>
-            <a class="nav-link <?php echo ($current_page == 'game.php') ? 'active' : ''; ?>" href="/game.php">게임</a>
-        </nav>
+            <nav class="nav nav-masthead justify-content-center float-md-end">
+                <a class="nav-link <?php echo ($current_page == '/' || strpos($current_page, 'index.php') !== false) ? 'active' : ''; ?>" aria-current="page" href="/">메인</a>
+                <a class="nav-link <?php echo (strpos($current_page, '/board') !== false && strpos($current_page, '/mypage') === false) ? 'active' : ''; ?>" href="/board/board_list.php">게시판</a>
+                <?php if(isset($_SESSION['id'])){ ?> <a class="nav-link <?php echo (strpos($current_page, '/mypage') === 0) ? 'active' : ''; ?>" href="/mypage">마이페이지</a><?php } ?>
+                <a class="nav-link <?php echo (strpos($current_page, '/game') !== false) ? 'active' : ''; ?>" href="/game.php">게임</a>
+            </nav>
     </div>
 </header>
 
@@ -92,12 +94,12 @@
                     </div>
                     <div class="form-floating mb-3 input-group">
                         <input type="text" class="form-control rounded-4" id="signup_postcode" name="postcode" placeholder="Postcode" readonly>
-                        <label for="signup_postcode">우편번호</label>
+                        <label for="signup_postcode">우편번호(선택사항)</label>
                         <button class="btn btn-outline-secondary" type="button" onclick="SearchPostcode()">우편번호 검색</button>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control rounded-4" id="signup_address" name="address" placeholder="Address">
-                        <label for="signup_address">주소</label>
+                        <label for="signup_address">주소(선택사항)</label>
                     </div>
                     <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary" type="submit" onclick="">회원가입</button>
                     <button type="button" class="w-100 mb-2 btn btn-lg rounded-4 btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalLogin">
@@ -173,6 +175,11 @@
                 $('#signup_pw_about').addClass('text-success');
                 $('#signup_pw_about').html('사용 가능한 비밀번호 입니다');
             }
+
+            $('#signup_pw_check').removeClass('border-success');
+            $('#signup_pw_check_about').removeClass('text-success');
+            $('#signup_pw_check').removeClass('border-danger');
+            $('#signup_pw_check_about').removeClass('text-danger');
 
             // 비밀번호 비교
             if ($('#signup_pw_check').val() == "" || $('#signup_pw_check').val() != $('#signup_pw').val()) {
