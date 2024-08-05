@@ -21,6 +21,7 @@
             <!-- 배너 글 -->
             <h1>포크 놀이터</h1>
             <p class="lead">안전한 사이트 입니다! 안심하고 즐겨주세요!</p>
+            <p class="lead">DB에 비밀번호 저장 시 md5형식 안씁니다! 주의하세요!</p>
         </main>
         <!-- footer 추가 -->
         <?php require_once($_SERVER['DOCUMENT_ROOT'].'/include/footer.php'); ?>

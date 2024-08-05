@@ -14,6 +14,8 @@ if ($likeIdx) {
   BoardLikeCount($_REQUEST['idx']);
   echo json_encode(['result' => 1]);
 } else {
+  BoardLikeDelete($_SESSION['idx'], $_REQUEST['idx']);
+  BoardLikeCountDelete($_REQUEST['idx']);
   echo json_encode(['result' => 0]);
 }
 ?>

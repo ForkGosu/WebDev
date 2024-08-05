@@ -31,7 +31,11 @@
       $fileSize = $_FILES["fileUpload"]["size"];
     
       // 파일 확장자를 체크하고 허용되는 확장자를 지정합니다.
-      $allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+      $allowedExtensions = [
+        "jpg", "jpeg", "png", "gif", "bmp", "webp", "svg", // 이미지 파일
+        "pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", // 문서 파일
+        "zip", "rar", "tar", "gz", "7z" // 압축 파일
+      ];
       $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
     
       if (in_array($fileExtension, $allowedExtensions)) {

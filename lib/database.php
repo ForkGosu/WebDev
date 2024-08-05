@@ -390,12 +390,55 @@ function BoardLike($_user_idx, $_board_idx) {
         return false; // 삽입 실패 시 false 반환
     }
 }
+function BoardLikeDelete($_user_idx, $_board_idx) {
+    global $pdo; // 전역 변수 접근
+
+    // Prepared Statement 준비
+    $sql = "DELETE FROM board_like WHERE user_idx = :user_idx AND board_idx = :board_idx";
+    $stmt = $pdo->prepare($sql);
+
+
+    // 변수 바인딩
+    $stmt->bindParam(':user_idx', $_user_idx, PDO::PARAM_INT);
+    $stmt->bindParam(':board_idx', $_board_idx, PDO::PARAM_INT);
+
+
+    // SQL문 실행
+    try {
+        $stmt->execute();
+        // 삽입된 마지막 행의 ID 가져오기
+        $lastInsertId = $pdo->lastInsertId();
+        return $lastInsertId; // 성공적으로 삽입되면 true 반환
+    } catch (PDOException $e) {
+        return false; // 삽입 실패 시 false 반환
+    }
+}
 
 function BoardLikeCount($_idx) {
     global $pdo; // 전역 변수 접근
 
     // Prepared Statement 준비
     $sql = "UPDATE board SET `like` = `like` + 1 WHERE idx = :idx";
+    $stmt = $pdo->prepare($sql);
+
+    // 변수 바인딩
+    $stmt->bindParam(':idx', $_idx, PDO::PARAM_INT);
+
+    // SQL문 실행
+    try {
+        $stmt->execute();
+        return $stmt->rowCount(); // 성공적으로 업데이트된 행 수 반환
+    } catch (PDOException $e) {
+        // 오류 메시지를 출력
+        // echo "Error: " . $e->getMessage();
+        return false; // 업데이트 실패 시 false 반환
+    }
+}
+function BoardLikeCountDelete($_idx) {
+    global $pdo; // 전역 변수 접근
+
+    // Prepared Statement 준비
+    $sql = "UPDATE board SET `like` = `like` - 1 WHERE idx = :idx";
     $stmt = $pdo->prepare($sql);
 
     // 변수 바인딩

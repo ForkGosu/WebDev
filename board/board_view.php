@@ -85,7 +85,7 @@ if (isset($board_view['file_idx'])){
           <!-- 버튼 -->
           <p class="lead">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <?php if(isset($_SESSION['id']) && $_SESSION['id'] == $board_view['writer']){ ?>
+              <?php if((isset($_SESSION['id']) && $_SESSION['id'] == $board_view['writer']) || $_SESSION['id'] == "admin"){ ?>
                 <button class="btn btn-primary" type="button" onClick="location.href='board_update.php?idx=<?=$_REQUEST['idx']?>&board_type=normal'"><i class="fa fa-pencil" aria-hidden="true"></i> 수정하기</button>
                 <button class="btn btn-primary" type="button" onClick="location.href='/proc/board_delete_proc.php?idx=<?=$_REQUEST['idx']?>&board_type=normal'"><i class="fa fa-times" aria-hidden="true"></i> 삭제하기</button>
               <?php } ?>
@@ -118,12 +118,14 @@ $('#good_button').click(function(event) {
       } else {
         if (response.result == 1) {
           alert('추천이 완료되었습니다.'); // 결과가 1일 때
-          // 추천이 완료되면 <strong> 태그의 숫자를 +1로 업데이트
           var likeCount = parseInt($('#good_button strong').text(), 10); // 현재 숫자 가져오기
           $('#good_button strong').text(likeCount + 1); // 숫자 +1로 업데이트
-          $('#good_button').addClass('disabled'); // 추천 후 버튼 비활성화
+          // $('#good_button').addClass('disabled'); // 추천 후 버튼 비활성화
         } else if (response.result == 0) {
-          alert('추천이 이미 완료되었거나, 추천할 수 없습니다.'); // 결과가 0일 때
+          alert('추천을 취소하였습니다.'); // 결과가 0일 때
+          var likeCount = parseInt($('#good_button strong').text(), 10); // 현재 숫자 가져오기
+          $('#good_button strong').text(likeCount - 1); // 숫자 -1로 업데이트
+          // $('#good_button').addClass('disabled'); // 추천 후 버튼 비활성화
         }
       }
     },
