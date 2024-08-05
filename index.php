@@ -21,9 +21,6 @@
             <!-- 배너 글 -->
             <h1>포크 놀이터</h1>
             <p class="lead">안전한 사이트 입니다! 안심하고 즐겨주세요!</p>
-            <p class="lead">
-                <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">더 알아가기</a>
-            </p>
         </main>
         <!-- footer 추가 -->
         <?php require_once($_SERVER['DOCUMENT_ROOT'].'/include/footer.php'); ?>

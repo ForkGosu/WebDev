@@ -7,7 +7,7 @@
   </script>
 <?php exit; } ?>
 
-<?php $board_view = BoardView($_REQUEST['idx']);?>
+<?php $board_view = BoardView($_REQUEST['idx'], $_REQUEST['board_type']);?>
 <?php if(!isset($_SESSION['id']) || $_SESSION['id'] != $board_view['writer']){ ?>
 <script>
   alert("잘못된 접근입니다");

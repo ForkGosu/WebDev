@@ -6,7 +6,7 @@
 </script>
 <?php exit; } ?>
 
-<?php $board_view = BoardView($_REQUEST['idx'], "normal");?>
+<?php $board_view = BoardView($_REQUEST['idx'], "inquiry");?>
 <?php if(!$board_view){ ?>
 <script>
   alert("잘못된 접근입니다");

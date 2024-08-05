@@ -1,23 +1,19 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/lib/database.php'); ?>
 <?php session_start(); ?>
 
-<?php if(!$_REQUEST['idx']){ ?>
+<?php if(!$_REQUEST['idx'] || !$_REQUEST['pass']){ ?>
 <script>
   alert("잘못된 접근입니다");
   history.back();
 </script>
 <?php exit; } ?>
-<?php
-  $isLogin = false;
-  if(isset($_SESSION['id']) && $_SESSION['id'] != ""){
-    $isLogin = true;
-  }
-?>
 
 
 <?php BoardViewCount($_REQUEST['idx']) ?>
 
-<?php $board_view = BoardView($_REQUEST['idx'], "normal");?>
+<?php $board_view = BoardView($_REQUEST['idx'], "inquiry");?>
+
+
 <?php if(!$board_view){ ?>
 <script>
   alert("잘못된 접근입니다");
@@ -28,6 +24,13 @@
 <?php if($board_view['isDelete'] == 1){ ?>
 <script>
   alert("잘못된 접근입니다");
+  history.back();
+</script>
+<?php exit; } ?>
+
+<?php if($_REQUEST['pass'] != $board_view['pass'] && $_SESSION['id'] != "admin"){ ?>
+<script>
+  alert("비밀번호가 다릅니다");
   history.back();
 </script>
 <?php exit; } ?>
@@ -59,7 +62,7 @@ if (isset($board_view['file_idx'])){
           <div class="d-flex mb-4 justify-content-end">
             <div>
               <ul class="list-inline text-muted small mb-0">
-                <li class="list-inline-item"><i class="fa fa-user-circle-o"></i> <?= htmlspecialchars($board_view['writer']) ?></li>
+                <li class="list-inline-item"><i class="fa fa-phone" aria-hidden="true"> <?= htmlspecialchars($board_view['phone']) ?></i> </li>
                 <li class="list-inline-item"><i class="fa fa-clock-o"></i> <?= date('Y-m-d', $board_view['wdate']); ?></li>
                 <li class="list-inline-item"><i class="fa fa-eye"></i> <?= $board_view['view'] ?> 회</li>
               </ul>
@@ -76,18 +79,18 @@ if (isset($board_view['file_idx'])){
           </li>
           <?php } ?>
           <!-- 추천 -->
-          <?php if($isLogin){ ?>
+          <!-- <?php if($isLogin){ ?>
           <a href="" id="good_button" class="btn btn-outline-primary m-4"><i class="fa fa-thumbs-up"></i> <strong><?=$board_view['like']?></strong></a>
           <?php } else { ?>
           <a href="" id="good_button" class="btn btn-outline-primary m-4 disabled"><i class="fa fa-thumbs-up"></i> <strong><?=$board_view['like']?></strong></a>
-          <?php } ?>
+          <?php } ?> -->
           
           <!-- 버튼 -->
           <p class="lead">
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
               <?php if(isset($_SESSION['id']) && $_SESSION['id'] == $board_view['writer']){ ?>
-                <button class="btn btn-primary" type="button" onClick="location.href='board_update.php?idx=<?=$_REQUEST['idx']?>&board_type=normal'"><i class="fa fa-pencil" aria-hidden="true"></i> 수정하기</button>
-                <button class="btn btn-primary" type="button" onClick="location.href='/proc/board_delete_proc.php?idx=<?=$_REQUEST['idx']?>&board_type=normal'"><i class="fa fa-times" aria-hidden="true"></i> 삭제하기</button>
+                <button class="btn btn-primary" type="button" onClick="location.href='board_update.php?idx=<?=$_REQUEST['idx']?>'"><i class="fa fa-pencil" aria-hidden="true"></i> 수정하기</button>
+                <button class="btn btn-primary" type="button" onClick="location.href='/proc/board_delete_proc.php?idx=<?=$_REQUEST['idx']?>&board_type=inquiry'"><i class="fa fa-times" aria-hidden="true"></i> 삭제하기</button>
               <?php } ?>
               <button class="btn btn-primary" type="button" onClick="location.href='board_list.php'"><i class="fa fa-list" aria-hidden="true"></i> 목록으로</button>
             </div>

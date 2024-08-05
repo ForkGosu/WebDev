@@ -1,12 +1,18 @@
 <?php require_once($_SERVER['DOCUMENT_ROOT'].'/lib/database.php'); ?>
+<?php
+  // error_reporting( E_ALL );
+  // ini_set( "display_errors", 1 );
+?>
 
 <?php session_start(); ?>
-<?php if (!isset($_SESSION['id']) || $_SESSION['id'] == ""){ ?>
-  <script>
-    alert("글 작성 시 로그인이 필요합니다");
-    location.href="/";
-  </script>
-<?php exit; } ?>
+<?php if ($_REQUEST['board_type'] != "inquiry"){ ?>
+  <?php if (!isset($_SESSION['id']) || $_SESSION['id'] == ""){ ?>
+    <script>
+      alert("글 작성 시 로그인이 필요합니다");
+      location.href="/";
+    </script>
+  <?php exit; } ?>
+<?php } ?>
 
 <?php
   if(isset($_FILES["fileUpload"])){
@@ -53,16 +59,18 @@
   }
 ?>
 
-<?php $writeIdx = BoardWrite($_REQUEST['subject'], $_REQUEST['content'], $_SESSION['id'], $file_idx); ?>
+<?php $writeIdx = BoardWrite($_REQUEST['subject'], $_REQUEST['content'], $_SESSION['id'], $file_idx, $_REQUEST['board_type'], $_REQUEST['phone'], $_REQUEST['pass']); ?>
 
 <?php if ($writeIdx){ ?>
   <script>
     alert("작성 완료!");
-    location.href="/board/board_view.php?idx=<?=$writeIdx?>";
+    location.href="/";
+    // location.href="/board/board_view.php?idx=<?=$writeIdx?>";
   </script>
 <?php } else { ?>
   <script>
     alert("작성 실패!");
-    location.href="/board/board_write.php";
+    location.href="/";
+    // location.href="/board/board_write.php";
   </script>
 <?php } ?>

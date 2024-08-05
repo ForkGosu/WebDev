@@ -1,10 +1,4 @@
 <?php session_start(); ?>
-<?php if (!isset($_SESSION['id']) || $_SESSION['id'] == ""){ ?>
-  <script>
-    alert("글 작성 시 로그인이 필요합니다");
-    history.back();
-  </script>
-<?php exit; } ?>
 
 <!doctype html>
 <html lang="ko" class="h-100">
@@ -22,8 +16,18 @@
         <!-- main 시작 -->
         <main class="px-3">
           <form action="/proc/board_write_proc.php" id="boardForm" method="POST" enctype="multipart/form-data">
-            <blockquote><h3>새 글 작성하기</h3></blockquote>
-            <input name="board_type" type="hidden" value="normal">
+            <blockquote><h3>문의 작성하기</h3></blockquote>
+            <input name="board_type" type="hidden" value="inquiry">
+            <!-- 휴대폰 번호 -->
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone" aria-hidden="true"></i></span>
+              <input name="phone" type="text" class="form-control" placeholder="휴대폰번호" aria-label="휴대폰번호" aria-describedby="basic-addon1">
+            </div>
+            <!-- 비밀번호 -->
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1"><i class="fa fa-lock" aria-hidden="true"></i></span>
+              <input name="pass" type="password" class="form-control" placeholder="비밀번호" aria-label="비밀번호" aria-describedby="basic-addon1">
+            </div>
             <!-- 제목 -->
             <input class="board_subject" name="subject" type="text" placeholder="제목">
             <!-- 내용 -->
@@ -36,7 +40,7 @@
             <!-- 버튼 -->
             <p class="lead">
               <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button class="btn btn-primary" type="submit"><i class="fa fa-pencil" aria-hidden="true"></i> 작성완료</button>
+                <button class="btn btn-primary" type="submit"><i class="fa fa-pencil" aria-hidden="true"></i> 문의완료</button>
                 <button class="btn btn-primary" type="button"><i class="fa fa-times" aria-hidden="true"></i> 취소</button>
               </div>
             </p>

@@ -27,9 +27,11 @@
         <?php } ?>
             <nav class="nav nav-masthead justify-content-center float-md-end">
                 <a class="nav-link <?php echo ($current_page == '/' || strpos($current_page, 'index.php') !== false) ? 'active' : ''; ?>" aria-current="page" href="/">메인</a>
-                <a class="nav-link <?php echo (strpos($current_page, '/board') !== false && strpos($current_page, '/mypage') === false) ? 'active' : ''; ?>" href="/board/board_list.php">게시판</a>
-                <?php if(isset($_SESSION['id'])){ ?> <a class="nav-link <?php echo (strpos($current_page, '/mypage') === 0) ? 'active' : ''; ?>" href="/mypage">마이페이지</a><?php } ?>
-                <a class="nav-link <?php echo (strpos($current_page, '/game') !== false) ? 'active' : ''; ?>" href="/game.php">게임</a>
+                <a class="nav-link <?php echo (strpos($current_page, '/board') !== false && strpos($current_page, '/mypage') === false && strpos($current_page, '/board_inquiry') === false) ? 'active' : ''; ?>" href="/board/board_list.php">게시판</a>
+                <?php if(isset($_SESSION['id'])){ ?> 
+                    <a class="nav-link <?php echo (strpos($current_page, '/mypage') === 0) ? 'active' : ''; ?>" href="/mypage">마이페이지</a>
+                <?php } ?>
+                <a class="nav-link <?php echo (strpos($current_page, '/board_inquiry') !== false) ? 'active' : ''; ?>" href="/board_inquiry/board_list.php">문의하기</a>
             </nav>
     </div>
 </header>

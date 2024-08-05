@@ -95,7 +95,7 @@ function IsUserIdCheck($_id){
 //! Board Data
 //!!!!!!!!!!!!!!
 
-function GetTotalBoardCount($_search_column, $_search_word, $_date_from, $_date_to){
+function GetTotalBoardCount($_search_column, $_search_word, $_date_from, $_date_to, $_board_type){
     global $pdo; // 전역 변수 접근
 
     // 허용된 컬럼 이름을 확인
@@ -105,7 +105,7 @@ function GetTotalBoardCount($_search_column, $_search_word, $_date_from, $_date_
     }
 
     // Prepared Statement 준비
-    $sql = "SELECT COUNT(*) as total FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word AND wdate >= :date_from AND wdate <= :date_to";
+    $sql = "SELECT COUNT(*) as total FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word AND wdate >= :date_from AND wdate <= :date_to AND board_type = :board_type";
     $stmt = $pdo->prepare($sql);
 
     // 변수 바인딩
@@ -115,6 +115,7 @@ function GetTotalBoardCount($_search_column, $_search_word, $_date_from, $_date_
     $stmt->bindParam(':date_from', $_date_from, PDO::PARAM_INT);
     $stmt->bindParam(':date_to', $_date_to, PDO::PARAM_INT);
 
+    $stmt->bindParam(':board_type', $_board_type, PDO::PARAM_STR);
     // SQL 문 실행
     $stmt->execute();
 
@@ -149,7 +150,7 @@ function BoardList($_page, $_items_per_page){
     return $board_list;
 }
 
-function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_word, $_order_column, $_order_sort, $_date_from, $_date_to){
+function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_word, $_order_column, $_order_sort, $_date_from, $_date_to, $_board_type){
     global $pdo; // 전역 변수 접근
     
     // 페이지 번호에 따른 오프셋 계산
@@ -174,7 +175,7 @@ function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_w
     }
 
     // Prepared Statement 준비
-    $sql = "SELECT * FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word AND wdate >= :date_from AND wdate <= :date_to ORDER BY {$_order_column} {$_order_sort} LIMIT :limit OFFSET :offset";
+    $sql = "SELECT * FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word AND wdate >= :date_from AND wdate <= :date_to AND board_type = :board_type ORDER BY {$_order_column} {$_order_sort} LIMIT :limit OFFSET :offset";
     $stmt = $pdo->prepare($sql);
 
     // 변수 바인딩
@@ -184,6 +185,7 @@ function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_w
     $stmt->bindParam(':date_from', $_date_from, PDO::PARAM_INT);
     $stmt->bindParam(':date_to', $_date_to, PDO::PARAM_INT);
 
+    $stmt->bindParam(':board_type', $_board_type, PDO::PARAM_STR);
 
 
     $stmt->bindValue(':limit', $_items_per_page, PDO::PARAM_INT);
@@ -203,15 +205,16 @@ function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_w
     }
 }
 
-function BoardView($_idx){
+function BoardView($_idx, $_board_type){
     global $pdo; // 전역 변수 접근
 
     // Prepared Statement 준비
-    $sql = "SELECT * FROM board WHERE idx = :idx LIMIT 1";
+    $sql = "SELECT * FROM board WHERE idx = :idx AND board_type = :board_type LIMIT 1";
     $stmt = $pdo->prepare($sql);
 
     // 변수 바인딩
     $stmt->bindParam(':idx', $_idx, PDO::PARAM_INT);
+    $stmt->bindParam(':board_type', $_board_type, PDO::PARAM_STR);
 
     // SQL 문 실행
     $stmt->execute();
@@ -223,11 +226,11 @@ function BoardView($_idx){
     return $board_view;
 }
 
-function BoardWrite($_subject, $_content, $_writer, $_file_idx){
+function BoardWrite($_subject, $_content, $_writer, $_file_idx, $_board_type, $_phone, $_pass){
     global $pdo; // 전역 변수 접근
 
     // Prepared Statement 준비
-    $sql = "INSERT INTO board (subject, content, wdate, writer, file_idx) VALUES (:subject, :content, unix_timestamp(), :writer, :file_idx)";
+    $sql = "INSERT INTO board (subject, content, wdate, writer, file_idx, board_type, phone, pass) VALUES (:subject, :content, unix_timestamp(), :writer, :file_idx, :board_type, :phone, :pass)";
     $stmt = $pdo->prepare($sql);
 
 
@@ -236,6 +239,9 @@ function BoardWrite($_subject, $_content, $_writer, $_file_idx){
     $stmt->bindParam(':content', $_content, PDO::PARAM_STR);
     $stmt->bindParam(':writer', $_writer, PDO::PARAM_STR);
     $stmt->bindParam(':file_idx', $_file_idx, PDO::PARAM_INT);
+    $stmt->bindParam(':board_type', $_board_type, PDO::PARAM_STR);
+    $stmt->bindParam(':phone', $_phone, PDO::PARAM_STR);
+    $stmt->bindParam(':pass', $_pass, PDO::PARAM_STR);
 
 
     // SQL문 실행
@@ -245,22 +251,30 @@ function BoardWrite($_subject, $_content, $_writer, $_file_idx){
         $lastInsertId = $pdo->lastInsertId();
         return $lastInsertId; // 성공적으로 삽입되면 true 반환
     } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
         return false; // 삽입 실패 시 false 반환
     }
 }
 
-function BoardUpdate($_idx, $_subject, $_content, $_writer, $_file_idx){
+function BoardUpdate($_idx, $_subject, $_content, $_writer, $_file_idx, $_board_type, $_phone, $_pass){
     global $pdo; // 전역 변수 접근
 
     // Prepared Statement 준비
-    $sql = "UPDATE board SET subject = :subject, content = :content, file_idx = :file_idx WHERE idx = :idx";
+    $sql = "UPDATE board SET subject = :subject, content = :content, file_idx = :file_idx, phone = :phone, pass = :pass WHERE idx = :idx AND board_type = :board_type";
     $stmt = $pdo->prepare($sql);
 
     // 변수 바인딩
     $stmt->bindParam(':subject', $_subject, PDO::PARAM_STR);
     $stmt->bindParam(':content', $_content, PDO::PARAM_STR);
-    $stmt->bindParam(':file_idx', $_file_idx, PDO::PARAM_INT);
+    if(!isset($_file_idx) || $_file_idx=="") {
+        $_file_idx = null;
+    } 
+    $stmt->bindValue(':file_idx', $_file_idx, PDO::PARAM_INT);
     $stmt->bindParam(':idx', $_idx, PDO::PARAM_INT);
+    $stmt->bindParam(':board_type', $_board_type, PDO::PARAM_STR);
+
+    $stmt->bindParam(':phone', $_phone, PDO::PARAM_STR);
+    $stmt->bindParam(':pass', $_pass, PDO::PARAM_STR);
 
     // SQL문 실행
     try {
