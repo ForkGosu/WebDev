@@ -22,6 +22,8 @@ $user = UserLogin($_POST['id'],$_POST['pw']);
 
 if ($user){
   $_SESSION['id'] = $user['id'];
+  $_SESSION['idx'] = $user['idx'];
+  
   header("location: {$_SERVER['HTTP_REFERER']}");
   exit;
 }

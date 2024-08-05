@@ -6,7 +6,7 @@
 ?>
 <header style="margin-bottom: 100px">
     <div>
-        <h3 class="float-md-start mb-0">포크 놀이터</h3>
+        <h3 class="float-md-start mb-0" style="cursor: pointer" onClick="location.href='/'">포크 놀이터</h3>
         <?php if($_SESSION['id'] == ""){ ?>
             <!-- Button trigger modal -->
             <button type="button" class="float-md-start btn btn-primary btn-sm mx-3 mt-1" role="button" data-bs-toggle="modal" data-bs-target="#modalLogin">
