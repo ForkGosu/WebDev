@@ -95,7 +95,7 @@ function IsUserIdCheck($_id){
 //! Board Data
 //!!!!!!!!!!!!!!
 
-function GetTotalBoardCount($_search_column, $_search_word){
+function GetTotalBoardCount($_search_column, $_search_word, $_date_from, $_date_to){
     global $pdo; // 전역 변수 접근
 
     // 허용된 컬럼 이름을 확인
@@ -105,12 +105,15 @@ function GetTotalBoardCount($_search_column, $_search_word){
     }
 
     // Prepared Statement 준비
-    $sql = "SELECT COUNT(*) as total FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word";
+    $sql = "SELECT COUNT(*) as total FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word AND wdate >= :date_from AND wdate <= :date_to";
     $stmt = $pdo->prepare($sql);
 
     // 변수 바인딩
     $search_word = '%' . $_search_word . '%';
     $stmt->bindParam(':search_word', $search_word, PDO::PARAM_STR);
+
+    $stmt->bindParam(':date_from', $_date_from, PDO::PARAM_INT);
+    $stmt->bindParam(':date_to', $_date_to, PDO::PARAM_INT);
 
     // SQL 문 실행
     $stmt->execute();
@@ -146,7 +149,7 @@ function BoardList($_page, $_items_per_page){
     return $board_list;
 }
 
-function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_word, $_order_column, $_order_sort){
+function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_word, $_order_column, $_order_sort, $_date_from, $_date_to){
     global $pdo; // 전역 변수 접근
     
     // 페이지 번호에 따른 오프셋 계산
@@ -171,12 +174,17 @@ function BoardListToSearch($_page, $_items_per_page, $_search_column, $_search_w
     }
 
     // Prepared Statement 준비
-    $sql = "SELECT * FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word ORDER BY {$_order_column} {$_order_sort} LIMIT :limit OFFSET :offset";
+    $sql = "SELECT * FROM board WHERE isDelete = 0 AND {$_search_column} LIKE :search_word AND wdate >= :date_from AND wdate <= :date_to ORDER BY {$_order_column} {$_order_sort} LIMIT :limit OFFSET :offset";
     $stmt = $pdo->prepare($sql);
 
     // 변수 바인딩
     $search_word = '%' . $_search_word . '%';
     $stmt->bindParam(':search_word', $search_word, PDO::PARAM_STR);
+    
+    $stmt->bindParam(':date_from', $_date_from, PDO::PARAM_INT);
+    $stmt->bindParam(':date_to', $_date_to, PDO::PARAM_INT);
+
+
 
     $stmt->bindValue(':limit', $_items_per_page, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);

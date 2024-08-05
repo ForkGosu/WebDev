@@ -29,12 +29,26 @@
   if(!$order_sort){
     $order_sort = "desc";
   }
+  
+  $date_from = strtotime($_REQUEST['date_from']);
+  if(!$date_from){
+    $date_from = 0;
+  }
 
+  $date_to = strtotime($_REQUEST['date_to']);
+  if(!$date_to){
+    $date_to = time();//(int)date('YmdHis');
+  }
+  // 현재 날짜를 "Y-m-d" 형식으로 가져오기
+  $currentDate = date('Y-m-d', $date_to);
+  // 오늘의 23:59:59로 설정
+  $endOfDayDateTime = $currentDate . ' 23:59:59';
+  $date_to = strtotime($endOfDayDateTime);
   
   // 한 페이지에 표시할 게시물 수
   $items_per_page = 10;
 
-  $total_items = GetTotalBoardCount($search_column, $search_word); // 총 게시물 수
+  $total_items = GetTotalBoardCount($search_column, $search_word, $date_from, $date_to); // 총 게시물 수
   $total_pages = ceil($total_items / $items_per_page); // 총 페이지 수
   
   // 한 번에 표시할 페이지 버튼 수
@@ -49,7 +63,7 @@
 
 ?>
 
-<?php $board_list = BoardListToSearch($page, $items_per_page, $search_column, $search_word, $order_column, $order_sort); ?>
+<?php $board_list = BoardListToSearch($page, $items_per_page, $search_column, $search_word, $order_column, $order_sort, $date_from, $date_to); ?>
 
 <!doctype html>
 <html lang="ko" class="h-100">
@@ -73,15 +87,17 @@
           <nav class="navbar navbar-expand-lg navbar-light">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <form class="d-flex" id="search_form" action="./board_list.php" method="get">
-                <select name="search_column" class="form-select pe-0 me-2" style="width:150px" aria-label="Default select example">
-                  <option value="subject" selected>제목</option>
-                  <option value="content">내용</option>
-                  <option value="writer">작성자</option>
+                <input name="order_column" type="hidden" value="<?=$order_column?>">
+                <input name="order_sort" type="hidden" value="<?=$order_sort?>">
+                <select name="search_column" class="form-select pe-0 me-2" style="width:90px" aria-label="Default select example">
+                  <option value="subject" <?=$search_column == "subject" ? "selected" : ""?>>제목</option>
+                  <option value="content" <?=$search_column == "content" ? "selected" : ""?>>내용</option>
+                  <option value="writer" <?=$search_column == "writer" ? "selected" : ""?>>작성자</option>
                 </select>
-                <input name="search_word" class="form-control me-2" style="width:300px" type="search" placeholder="Search" aria-label="Search">
+                <input name="search_word" class="form-control me-2" style="width:200px" type="search" value="<?=$search_word?>" placeholder="Search" aria-label="Search">
+                <input type="date" class="me-2" style="width:110px" name="date_from" value="<?=$_REQUEST['date_from']?>">
+                <input type="date" class="me-2" style="width:110px" name="date_to" value="<?=$_REQUEST['date_to']?>">
                 <button class="btn btn-outline-success" type="submit">Search</button>
-              <input name="order_column" type="hidden" value="<?=$order_column?>">
-              <input name="order_sort" type="hidden" value="<?=$order_sort?>">
               </form>
             </div>
           </nav>
@@ -90,10 +106,10 @@
             <thead>
               <tr>
                 <th class="col-md-1">번호</th>
-                <th class="col-md-3"><a class="text-decoration-none text-white" href="board_list.php?search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=subject&order_sort=<?=$order_sort != "desc" ? "desc" : "asc"?>">제목<?=$order_column == "subject" ? ($order_sort == "desc" ? " ▼ " : " ▲ ") : " - "?></a></th>
+                <th class="col-md-3"><a class="text-decoration-none text-white" href="board_list.php?search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=subject&order_sort=<?=$order_column == "subject" ? ($order_sort != "desc" ? "desc" : "asc") : "desc"?>&date_from=<?=$_REQUEST['date_from']?>&date_to=<?=$_REQUEST['date_to']?>">제목<?=$order_column == "subject" ? ($order_sort == "desc" ? " ▼ " : " ▲ ") : " - "?></a></th>
                 <th class="col-md-1">글쓴이</th>
-                <th class="col-md-2"><a class="text-decoration-none text-white" href="board_list.php?search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=wdate&order_sort=<?=$order_sort != "desc" ? "desc" : "asc"?>">작성날짜<?=$order_column == "wdate" ? ($order_sort == "desc" ? " ▼ " : " ▲ ") : " - "?></a></th>
-                <th class="col-md-1"><a class="text-decoration-none text-white" href="board_list.php?search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=view&order_sort=<?=$order_sort != "desc" ? "desc" : "asc"?>">조회<?=$order_column == "view" ? ($order_sort == "desc" ? " ▼ " : " ▲ ") : " - "?></a></th>
+                <th class="col-md-2"><a class="text-decoration-none text-white" href="board_list.php?search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=wdate&order_sort=<?=$order_column == "wdate" ? ($order_sort != "desc" ? "desc" : "asc") : "desc"?>&date_from=<?=$_REQUEST['date_from']?>&date_to=<?=$_REQUEST['date_to']?>">작성날짜<?=$order_column == "wdate" ? ($order_sort == "desc" ? " ▼ " : " ▲ ") : " - "?></a></th>
+                <th class="col-md-1"><a class="text-decoration-none text-white" href="board_list.php?search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=view&order_sort=<?=$order_column == "view" ? ($order_sort != "desc" ? "desc" : "asc") : "desc"?>&date_from=<?=$_REQUEST['date_from']?>&date_to=<?=$_REQUEST['date_to']?>">조회<?=$order_column == "view" ? ($order_sort == "desc" ? " ▼ " : " ▲ ") : " - "?></a></th>
               </tr>
             </thead>
             <tbody>
@@ -134,7 +150,7 @@
                 <?php if ($_page == $page) { ?>
                   <li class="page-item active"><a class="page-link" aria-current="page"><?=$_page?></a></li>
                 <?php } else { ?>
-                  <li class="page-item"><a class="page-link" href="board_list.php?page=<?=$_page?>&search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=<?=$order_column?>&order_sort=<?=$order_sort?>"><?=$_page?></a></li>
+                  <li class="page-item"><a class="page-link" href="board_list.php?page=<?=$_page?>&search_column=<?=$search_column?>&search_word=<?=$search_word?>&order_column=<?=$order_column?>&order_sort=<?=$order_sort?>&date_from=<?=$_REQUEST['date_from']?>&date_to=<?=$_REQUEST['date_to']?>"><?=$_page?></a></li>
                 <?php } ?>
               <?php } ?>
               <li class="page-item <?= $end_page < $total_pages ? "" : "disabled" ?>">
